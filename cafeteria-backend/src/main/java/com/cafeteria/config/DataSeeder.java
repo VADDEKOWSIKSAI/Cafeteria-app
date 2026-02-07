@@ -13,9 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 @Configuration
-public class AdminSeeder implements CommandLineRunner {
+public class DataSeeder implements CommandLineRunner {
 
-    private static final Logger logger = LoggerFactory.getLogger(AdminSeeder.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -25,8 +25,12 @@ public class AdminSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminEmail = "admin@cafeteria.com";
+        seedAdmin();
+        seedStudent();
+    }
 
+    private void seedAdmin() {
+        String adminEmail = "admin@cafeteria.com";
         Optional<User> existingAdmin = userRepository.findByEmail(adminEmail);
 
         if (existingAdmin.isEmpty()) {
@@ -45,6 +49,29 @@ public class AdminSeeder implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode("admin123"));
             userRepository.save(admin);
             logger.info("Admin account exists. Password reset to 'admin123'.");
+        }
+    }
+
+    private void seedStudent() {
+        String studentEmail = "student@cafeteria.com";
+        Optional<User> existingStudent = userRepository.findByEmail(studentEmail);
+
+        if (existingStudent.isEmpty()) {
+            logger.info("No student found. Creating default student...");
+            User student = new User();
+            student.setName("Default Student");
+            student.setEmail(studentEmail);
+            student.setPassword(passwordEncoder.encode("student123"));
+            student.setRole(UserRole.STUDENT);
+
+            userRepository.save(student);
+            logger.info("Default Student Created Successfully! Email: {}, Password: student123", studentEmail);
+        } else {
+            // Force reset password to ensure access
+            User student = existingStudent.get();
+            student.setPassword(passwordEncoder.encode("student123"));
+            userRepository.save(student);
+            logger.info("Student account exists. Password reset to 'student123'.");
         }
     }
 }

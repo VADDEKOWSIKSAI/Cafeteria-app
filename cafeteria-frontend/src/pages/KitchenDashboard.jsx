@@ -24,8 +24,9 @@ const KitchenDashboard = () => {
 
     const fetchKitchenOrders = async () => {
         try {
-            const data = await OrderService.getKitchenOrders();
-            setOrders(data);
+            const response = await OrderService.getKitchenOrders();
+            console.log("Kitchen Orders:", response.data);
+            setOrders(response.data);
             setLoading(false);
         } catch (error) {
             console.error("Error fetching kitchen orders", error);

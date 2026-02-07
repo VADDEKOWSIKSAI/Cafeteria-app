@@ -48,10 +48,14 @@ const AdminDashboard = () => {
 
     const handleAddFood = (e) => {
         e.preventDefault();
+        console.log("Sending Food Data:", newFood); // Debug Log
         FoodService.addFood(newFood).then(() => {
             alert('Food added successfully');
             setNewFood({ name: '', description: '', price: '', category: '', imageUrl: '', available: true });
             setView('FOODS');
+        }).catch(error => {
+            console.error("Add Food Error:", error);
+            alert("Failed to add food: " + (error.response?.data?.message || error.message));
         });
     };
 
