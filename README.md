@@ -93,7 +93,9 @@ npm run dev
 
 **Pre-seeded Admin Account:**
 - **Email**: `admin@cafeteria.com`
-- **Password**: `admin123`
+- **Password**: *(Check `DataSeeder.java` or `application.properties` to set your own secure password)*
+
+> **Security Warning**: Please change these default credentials immediately upon deployment!
 
 *You can register new student accounts via the "Register" page.*
 

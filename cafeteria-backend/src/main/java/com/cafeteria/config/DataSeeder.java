@@ -30,7 +30,16 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedAdmin() {
-        String adminEmail = "admin@cafeteria.com";
+        String adminEmail = System.getenv("ADMIN_EMAIL");
+        String adminPassword = System.getenv("ADMIN_PASSWORD");
+
+        if (adminEmail == null)
+            adminEmail = "admin@cafeteria.com";
+        if (adminPassword == null) {
+            adminPassword = "admin123";
+            logger.warn("⚠️ SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable!");
+        }
+
         Optional<User> existingAdmin = userRepository.findByEmail(adminEmail);
 
         if (existingAdmin.isEmpty()) {
@@ -38,22 +47,27 @@ public class DataSeeder implements CommandLineRunner {
             User admin = new User();
             admin.setName("Super Admin");
             admin.setEmail(adminEmail);
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setRole(UserRole.ADMIN);
 
             userRepository.save(admin);
-            logger.info("Default Admin Created Successfully! Email: {}, Password: admin123", adminEmail);
+            logger.info("Default Admin Created Successfully!");
         } else {
-            // Force reset password to ensure access
-            User admin = existingAdmin.get();
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            userRepository.save(admin);
-            logger.info("Admin account exists. Password reset to 'admin123'.");
+            // Only reset if using default credentials or explicitly forced
+            // Commenting out forced reset to prevent overwriting production passwords
+            /*
+             * User admin = existingAdmin.get();
+             * admin.setPassword(passwordEncoder.encode(adminPassword));
+             * userRepository.save(admin);
+             * logger.info("Admin account exists. Password updated.");
+             */
         }
     }
 
     private void seedStudent() {
         String studentEmail = "student@cafeteria.com";
+        String studentPassword = "student123";
+
         Optional<User> existingStudent = userRepository.findByEmail(studentEmail);
 
         if (existingStudent.isEmpty()) {
@@ -61,17 +75,11 @@ public class DataSeeder implements CommandLineRunner {
             User student = new User();
             student.setName("Default Student");
             student.setEmail(studentEmail);
-            student.setPassword(passwordEncoder.encode("student123"));
+            student.setPassword(passwordEncoder.encode(studentPassword));
             student.setRole(UserRole.STUDENT);
 
             userRepository.save(student);
-            logger.info("Default Student Created Successfully! Email: {}, Password: student123", studentEmail);
-        } else {
-            // Force reset password to ensure access
-            User student = existingStudent.get();
-            student.setPassword(passwordEncoder.encode("student123"));
-            userRepository.save(student);
-            logger.info("Student account exists. Password reset to 'student123'.");
+            logger.info("Default Student Created Successfully!");
         }
     }
 }
