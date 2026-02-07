@@ -34,7 +34,7 @@ public class DataSeeder implements CommandLineRunner {
         String adminPassword = System.getenv("ADMIN_PASSWORD");
 
         if (adminEmail == null)
-            adminEmail = "admin@cafeteria.com";
+            adminEmail = "admin@smartcafeteria.com"; // Changed default to generic
         if (adminPassword == null) {
             adminPassword = "admin123";
             logger.warn("⚠️ SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable!");

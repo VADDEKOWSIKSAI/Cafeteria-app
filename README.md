@@ -92,7 +92,7 @@ npm run dev
 ## 🔐 Default Credentials
 
 **Pre-seeded Admin Account:**
-- **Email**: `admin@cafeteria.com`
+- **Email**: *(Check `DataSeeder.java` or `application.properties` to set your own admin email)*
 - **Password**: *(Check `DataSeeder.java` or `application.properties` to set your own secure password)*
 
 > **Security Warning**: Please change these default credentials immediately upon deployment!
