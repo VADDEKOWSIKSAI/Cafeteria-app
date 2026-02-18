@@ -66,7 +66,12 @@ cd cafeteria-backend
 ```
 Configure `src/main/resources/application.properties` with your MySQL credentials if they differ from default (`root`/`password`).
 
-Run the application:
+Run the application using the unified startup script (Recommended):
+```powershell
+.\run_app.ps1
+```
+
+Or run manually:
 ```bash
 mvn spring-boot:run
 ```
@@ -81,7 +86,7 @@ Install dependencies:
 ```bash
 npm install
 ```
-Run the development server:
+Run the development server (or use `.\run_app.ps1` from root):
 ```bash
 npm run dev
 ```
