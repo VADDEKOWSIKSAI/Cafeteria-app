@@ -30,37 +30,41 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedAdmin() {
+        // 1. Check/Create requested admin@cafeteria.com
+        if (!userRepository.existsByEmail("admin@cafeteria.com")) {
+            User requestedAdmin = new User();
+            requestedAdmin.setName("Admin");
+            requestedAdmin.setEmail("admin@cafeteria.com");
+            requestedAdmin.setPassword(passwordEncoder.encode("admin123"));
+            requestedAdmin.setRole(UserRole.ADMIN);
+            requestedAdmin.setEnabled(true);
+            userRepository.save(requestedAdmin);
+            logger.info("✅ Requested Admin (admin@cafeteria.com) created!");
+        }
+
+        // 2. Existing logic for env-based admin (kept for compatibility)
         String adminEmail = System.getenv("ADMIN_EMAIL");
         String adminPassword = System.getenv("ADMIN_PASSWORD");
 
         if (adminEmail == null)
-            adminEmail = "admin@smartcafeteria.com"; // Changed default to generic
+            adminEmail = "admin@smartcafeteria.com";
         if (adminPassword == null) {
             adminPassword = "admin123";
-            logger.warn("⚠️ SECURITY WARNING: Using default admin password. Set ADMIN_PASSWORD environment variable!");
         }
 
         Optional<User> existingAdmin = userRepository.findByEmail(adminEmail);
 
         if (existingAdmin.isEmpty()) {
-            logger.info("No admin found. Creating default admin...");
+            logger.info("Creating default env admin...");
             User admin = new User();
             admin.setName("Super Admin");
             admin.setEmail(adminEmail);
             admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setRole(UserRole.ADMIN);
+            admin.setEnabled(true);
 
             userRepository.save(admin);
-            logger.info("Default Admin Created Successfully!");
-        } else {
-            // Only reset if using default credentials or explicitly forced
-            // Commenting out forced reset to prevent overwriting production passwords
-            /*
-             * User admin = existingAdmin.get();
-             * admin.setPassword(passwordEncoder.encode(adminPassword));
-             * userRepository.save(admin);
-             * logger.info("Admin account exists. Password updated.");
-             */
+            logger.info("Default Env Admin Created Successfully!");
         }
     }
 
