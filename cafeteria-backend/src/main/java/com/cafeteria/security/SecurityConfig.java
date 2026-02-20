@@ -73,17 +73,18 @@ public class SecurityConfig {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
 
         // Load allowed origins from environment variable or default to localhost
-        String allowedOrigins = System.getenv("CORS_ALLOWED_ORIGINS");
-        if (allowedOrigins != null && !allowedOrigins.isBlank()) {
-            configuration.setAllowedOrigins(java.util.Arrays.asList(allowedOrigins.split(",")));
-        } else {
-            configuration.setAllowedOrigins(java.util.Arrays.asList(
-                    "http://localhost:5173",
-                    "http://localhost:3000",
-                    "https://airy-abundance-production.up.railway.app",
-                    "https://cafeteria-app-production-f799.up.railway.app"));
+        java.util.List<String> allowedOriginsList = new java.util.ArrayList<>();
+        allowedOriginsList.add("http://localhost:5173");
+        allowedOriginsList.add("http://localhost:3000");
+        allowedOriginsList.add("https://airy-abundance-production.up.railway.app");
+        allowedOriginsList.add("https://cafeteria-app-production-f799.up.railway.app");
+
+        String envAllowedOrigins = System.getenv("CORS_ALLOWED_ORIGINS");
+        if (envAllowedOrigins != null && !envAllowedOrigins.isBlank()) {
+            allowedOriginsList.addAll(java.util.Arrays.asList(envAllowedOrigins.split(",")));
         }
 
+        configuration.setAllowedOrigins(allowedOriginsList);
         configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.Arrays.asList("*"));
         configuration.setAllowCredentials(true);
