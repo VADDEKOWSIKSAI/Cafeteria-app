@@ -77,7 +77,11 @@ public class SecurityConfig {
         if (allowedOrigins != null && !allowedOrigins.isBlank()) {
             configuration.setAllowedOrigins(java.util.Arrays.asList(allowedOrigins.split(",")));
         } else {
-            configuration.setAllowedOrigins(java.util.Arrays.asList("http://localhost:5173", "http://localhost:3000"));
+            configuration.setAllowedOrigins(java.util.Arrays.asList(
+                    "http://localhost:5173",
+                    "http://localhost:3000",
+                    "https://airy-abundance-production.up.railway.app",
+                    "https://cafeteria-app-production-f799.up.railway.app"));
         }
 
         configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
